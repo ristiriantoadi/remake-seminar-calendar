@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="container-header">
+            <div class="navbar-header dashboard">
+                <div>
+                    <a class="navbar-brand">Sistem Informasi Seminar</a>
+                </div>
+                <div>
+                    <span class="name">Ristirianto Adi(F1D016078)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="sidebar float-left col-2">
+            <ul class=" nav nav-sidebar">
+                <li>
+                    <a>Jadwal Seminar</a>
+                </li>
+                <li class="active">
+                    <a>Pengajuan Seminar</a>
+                </li>
+            </ul>
+        </div>
+        <div class="main float-left col-10">
+            <h1 class="page-header">Pengajuan Seminar</h1>
+            <div class="form-container">
+                <form>
+                    <div class="data-proposal">
+                        <h3>Data Proposal</h3>
+                        <div class="input-container">
+                            <label class="form-label">Judul:</label>
+                            <input class="form" type="text" name="judul" placeholder="Judul Proposal">
+                        </div>
+                        <div class="input-container">
+                            <label class="form-label">Dosen Pembimbing 1:</label>
+                            <select name="dosen-pembimbing-1" class="form">
+                                <option>Dosen 1</option>
+                                <option>Dosen 2</option>
+                                <option>Dosen 3</option>
+                            </select>
+                        </div>
+                        <div class="input-container">
+                            <label class="form-label">Dosen Pembimbing 2:</label>
+                            <select name="dosen-pembimbing-1" class="form">
+                                <option>Dosen 1</option>
+                                <option>Dosen 2</option>
+                                <option>Dosen 3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="berkas-seminar">
+                        <h3>Berkas Syarat Seminar</h3>
+                        <div class="input-container">
+                            <label class="form-label">Surat Puas PKL</label>
+                            <input type="file" class="form" name="surat-puas-pkl">
+                        </div>
+                        <div class="input-container">
+                            <label class="form-label">Proposal</label>
+                            <input type="file" class="form" name="proposal">
+                        </div>
+                        <div class="input-container">
+                            <label class="form-label">Surat Pengajuan Seminar TA</label>
+                            <input type="file" class="form" name="surat-pengajuan">
+                        </div>
+                        <div class="input-container">
+                            <label class="form-label">Lembar Pengesahan</label>
+                            <input type="file" class="form" name="lembar-pengesahan">
+                        </div>
+                        <div class="input-container">
+                            <input type="submit" class="form-submit" value="Ajukan Seminar">
+                            <div style="clear: both;"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="calendar"></div>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+</body>
+</html>
