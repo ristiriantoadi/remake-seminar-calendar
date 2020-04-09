@@ -1,3 +1,12 @@
+<?php 
+    session_start();
+    if(isset($_SESSION['nim'])){
+        echo $_SESSION['nim'];
+    }else{
+        exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

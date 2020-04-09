@@ -1,3 +1,32 @@
+<?php
+    session_start();
+    if(isset($_POST['login_submit'])){
+        echo "yes";
+        require 'connect.php';
+
+        $nim = $_POST['nim'];
+        $password = $_POST['password'];
+        
+        echo $_POST['nim']."<br>";
+        echo $_POST['password']."<br>";
+
+        $sql = "SELECT * FROM mahasiswa WHERE nim like '$nim' AND password like '$password'";
+        // $sql = "SELECT * FROM mahasiswa";
+        $result = $conn->query($sql);
+        if($result->num_rows>0){
+            $_SESSION['nim']=$nim;
+            header("Location: jadwal.php");
+            exit();
+        }else{
+            echo "no result";
+        }
+        
+
+    }
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,10 +46,10 @@
     <div class="limiter">
         <div class="container-login">
             <div class="wrap-login">
-                <form class="login-form">
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" class="login-form">
                     <span class="login-title">Login</span>
                     <div class="wrap-input">
-                        <input class="input" type="text" name="username" placeholder="NIM">
+                        <input class="input" type="text" name="nim" placeholder="NIM">
                     </div>
                     <div class="wrap-input">
                         <input class="input" type="text" name="password" placeholder="Password">
@@ -35,7 +64,7 @@
                         </div>
                     </div>
                     <div class="container-login">
-                        <button class="login">Login</button>
+                        <input type="submit" value="Login" name="login_submit" class="login">
                     </div>
                 </form>
             </div>
