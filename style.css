@@ -57,7 +57,10 @@ body{
     /* margin-top:10px; */
 }
 
-.name:hover{
+.navbar-menu{
+    margin-left:15px;
+}
+.navbar-menu:hover{
     /* font-size: 14px; */
     color: #999;
     cursor: pointer;
@@ -324,4 +327,9 @@ ul{
 .form-container{
     width: 80%;
     /* background: #2d2b5e; */
+}
+
+footer{
+    padding:20px;
+    height:50px;
 }

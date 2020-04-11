@@ -5,15 +5,29 @@
         exit();
     }else{
         require 'connect.php';
+        
         $sql = "SELECT * FROM seminar";
         $result = $conn->query($sql);
         $rows=array();
+        $nim = $_SESSION['nim'];
         while($row=$result->fetch_assoc()){
-            // echo "id: ".$row['id_seminar'].", judul: ".$row['judul']."<br>";
+            
+            //0 = seminar saya, 1 = seminar yg sudah sy lihat, 2 = seminar yg belum sy lihat
+            if($row['nim'] == $nim){
+                $row['status'] = 0; 
+            }else{
+                $id_seminar=$row['id_seminar'];
+                $query = "SELECT * FROM peserta WHERE id_seminar=$id_seminar AND nim LIKE '$nim'";
+                $res = $conn->query($query);
+                if($res->num_rows>0){
+                    $row['status']=1;
+                }else{
+                    $row['status']=2;
+                }
+            }
             $rows[] = $row;
         }
-        $rows = json_encode($rows);
-        echo $rows;
+        $seminars = json_encode($rows);
     }
 ?>
 
@@ -31,33 +45,30 @@
     <script src='fullcalendar/packages/daygrid/main.js'></script>
 
     <script>
-        var  nim = "<?php echo $_SESSION['nim'] ?>";
-        // var row = <?php echo $rows ?>;
-        // console.log(row);
-        var allSeminar= <?php echo $rows ?>;       
-        var seminarSaya= allSeminar.filter(x=>{if(x.nim==nim) return x});
-        var seminarHadir=[];
-        var seminarBelumLihat=[];
+        var seminars = <?php echo $seminars ?>;
         var calendar={};
+
+        var mapSeminar=x=>{
+            const container={};
+            container.id=x.id_seminar;
+            container.title=x.judul;
+            container.start=x.tanggal;
+                    
+            if(x.status == 0){
+                container.backgroundColor="green";
+            }else if(x.status== 1){
+                container.backgroundColor="orange";
+            }
+            return container;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
-          var calendarEl = document.getElementById('calendar');
-  
-          calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: ['dayGrid'],
-            events: allSeminar.map(x =>{
-                    const container = {};
-                    container.id=x.id_seminar;
-                    container.title=x.judul;
-                    container.start=x.tanggal;
-                    if(x.nim == nim){
-                        container.backgroundColor="green";
-                    }
-                    return container;
-            })
-            // defaultView:'dayGridWeek'
-          });
-  
-          calendar.render();
+            var calendarEl = document.getElementById('calendar');           
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['dayGrid'],
+                events: seminars.map(mapSeminar)
+            });  
+            calendar.render();
         });
   
       </script>
@@ -70,7 +81,8 @@
                     <a class="navbar-brand">Sistem Informasi Seminar</a>
                 </div>
                 <div>
-                    <span class="name">Ristirianto Adi(F1D016078)</span>
+                    <span>Ristirianto Adi(F1D016078)</span>
+                    <span class="navbar-menu">Logout</span>
                 </div>
             </div>
         </div>
@@ -107,125 +119,74 @@
         </div>
         <div style="clear:both"></div>
     </div>
+    <footer style="text-align:center">Sistem Informasi Seminar | Ristirianto Adi</footer>
     <script>
-        console.log(seminarSaya);
-        console.log(calendar);
-        // calendar.removeEvents();
-        // calendar.getEvents().forEach(event=>event.remove());
-        // calendar.getEvents().forEach(event => event.remove());    
-        // var newEvents = seminarSaya.map(x=>{
-        //     const container = {};
-        //     container.id=x.id_seminar;
-        //     container.title=x.judul;
-        //     container.start=x.tanggal;
-        //     if(x.nim == nim){
-        //         container.backgroundColor="green";
-        //     }
-        //     return container;
-        // }); 
-        //     // add your new events
-        // newEvents.forEach(event => calendar.addEvent(event));
-        // calendar.render();
-        var state = 0; //0 = semua seminar, 1 = seminar saya, 2 = seminar yang sy hadiri, 3 = seminar belum sy lihat
+        var seminarSaya = document.getElementById('seminar-saya');
+        var seminarHadir = document.getElementById('seminar-hadir');
+        var seminarBelumLihat = document.getElementById('seminar-belum-lihat');
 
-        var checkboxSeminarSaya = document.getElementById("seminar-saya");
-        var checkboxSeminarHadir = document.getElementById("seminar-hadir");
-        var checkboxSeminarBelumLihat = document.getElementById("seminar-belum-lihat");
+        var state=0;//0 = semua, 1 = seminar saya, 2 = hadir, 3 = belum lihat
 
+        function updateSeminar(state){
+            calendar.getEvents().forEach(event=>event.remove()); 
+            var newEvents={}; 
+            if(state==0){
+                newEvents = seminars.map(mapSeminar);
+            }else if(state==1){
+                newEvents= seminars.filter(x=>{if(x.status==0) return x}).map(mapSeminar);
+            }else if(state==2){
+                newEvents= seminars.filter(x=>{if(x.status==1) return x}).map(mapSeminar);
+            }else{
+                newEvents= seminars.filter(x=>{if(x.status==2) return x}).map(mapSeminar);
+            }
+            newEvents.forEach(event=>calendar.addEvent(event));
+            calendar.render();
+        }
 
-        function updateState(){
-            if(checkboxSeminarSaya.checked){
+        function updateKalender(){
+            if(seminarSaya.checked){
                 state=1;
-            }else if(checkboxSeminarHadir.checked){
+            }else if(seminarHadir.checked){
                 state=2;
-            }else if(checkboxSeminarBelumLihat.checked){
+            }else if(seminarBelumLihat.checked){
                 state=3;
             }else{
                 state=0;
             }
-            
 
-            //update checkbox UI
-            if(state == 0){//semua seminar
-                // calendar.getEvents().forEach(event=>event.remove());
+            //update the UI
+            if(state==1){
+                seminarHadir.disabled=true;
+                seminarBelumLihat.disabled=true;
+                seminarSaya.disabled=false;
 
-                //update checkbox UI 
-                checkboxSeminarSaya.checked=false;
-                checkboxSeminarHadir.checked = false;
-                checkboxSeminarBelumLihat.checked = false;
+                updateSeminar(state);
 
-                checkboxSeminarSaya.disabled=false;
-                checkboxSeminarHadir.disabled = false;
-                checkboxSeminarBelumLihat.disabled = false;
+            }else if(state==2){
+                seminarSaya.disabled=true;
+                seminarBelumLihat.disabled=true;
+                seminarHadir.disabled=false;
 
-                //update calendar
-                calendar.getEvents().forEach(event=>event.remove());
-                var newEvents = allSeminar.map(x=>{
-                    const container = {};
-                    container.id=x.id_seminar;
-                    container.title=x.judul;
-                    container.start=x.tanggal;
-                    if(x.nim == nim){
-                        container.backgroundColor="green";
-                    }
-                    return container;
-                }); 
-                newEvents.forEach(event=>calendar.addEvent(event));
+                updateSeminar(state);
 
-            }else if(state == 1){//seminar saya
-                checkboxSeminarHadir.checked = false;
-                checkboxSeminarHadir.disabled = true;
+            }else if(state==3){
+                seminarSaya.disabled=true;
+                seminarHadir.disabled=true;
+                seminarBelumLihat.disabled=false;
 
-                checkboxSeminarBelumLihat.checked = false;
-                checkboxSeminarBelumLihat.disabled=true;
+                updateSeminar(state);
+            }else{
+                seminarSaya.disabled=false;
+                seminarHadir.disabled=false;
+                seminarBelumLihat.disabled=false;
 
-                //update calendar
-                calendar.getEvents().forEach(event=>event.remove());
-                var newEvents = seminarSaya.map(x=>{
-                    const container = {};
-                    container.id=x.id_seminar;
-                    container.title=x.judul;
-                    container.start=x.tanggal;
-                    container.backgroundColor="green";
-                    
-                    return container;
-                }); 
-                newEvents.forEach(event=>calendar.addEvent(event));
-
-            }else if(state==2){//seminar hadir
-                checkboxSeminarSaya.checked=false;
-                checkboxSeminarSaya.disabled=true;
-                
-                checkboxSeminarBelumLihat.checked=false;
-                checkboxSeminarBelumLihat.disabled=true;
-
-                // //update calendar
-                // calendar.getEvents().forEach(event=>event.remove());
-                // var newEvents = seminarHadir.map(x=>{
-                //     const container = {};
-                //     container.id=x.id_seminar;
-                //     container.title=x.judul;
-                //     container.start=x.tanggal;
-                //     if(x.nim == nim){
-                //         container.backgroundColor="green";
-                //     }
-                //     return container;
-                // }); 
-                // newEvents.forEach(event=>calendar.addEvent(event));
-
-            }else if(state==3){//seminar belum lihat
-                checkboxSeminarHadir.checked = false;
-                checkboxSeminarHadir.disabled = true;
-
-                checkboxSeminarSaya.checked=false;
-                checkboxSeminarSaya.disabled=true;
+                updateSeminar(state);
             }
-
-            calendar.render();
         }
-        checkboxSeminarSaya.addEventListener('click',updateState);
-        checkboxSeminarHadir.addEventListener('click',updateState);
-        checkboxSeminarBelumLihat.addEventListener('click',updateState);
+
+        seminarSaya.addEventListener('click',updateKalender);
+        seminarHadir.addEventListener('click',updateKalender);
+        seminarBelumLihat.addEventListener('click',updateKalender);
 
     </script>
 </body>

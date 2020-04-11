@@ -10,5 +10,5 @@
         die("mysqli_connect failure: ".mysqli_connect_error());
     }
 
-    echo "success";
+    // echo "success";
 ?>
