@@ -127,23 +127,9 @@
 
         var state=0;//0 = semua, 1 = seminar saya, 2 = hadir, 3 = belum lihat
 
-        function updateSeminar(state){
-            calendar.getEvents().forEach(event=>event.remove()); 
-            var newEvents={}; 
-            if(state==0){
-                newEvents = seminars.map(mapSeminar);
-            }else if(state==1){
-                newEvents= seminars.filter(x=>{if(x.status==0) return x}).map(mapSeminar);
-            }else if(state==2){
-                newEvents= seminars.filter(x=>{if(x.status==1) return x}).map(mapSeminar);
-            }else{
-                newEvents= seminars.filter(x=>{if(x.status==2) return x}).map(mapSeminar);
-            }
-            newEvents.forEach(event=>calendar.addEvent(event));
-            calendar.render();
-        }
-
         function updateKalender(){
+
+            //update state
             if(seminarSaya.checked){
                 state=1;
             }else if(seminarHadir.checked){
@@ -155,33 +141,37 @@
             }
 
             //update the UI
+            calendar.getEvents().forEach(event=>event.remove()); 
+            var newEvents={}; 
+
             if(state==1){
                 seminarHadir.disabled=true;
                 seminarBelumLihat.disabled=true;
                 seminarSaya.disabled=false;
 
-                updateSeminar(state);
-
+                newEvents= seminars.filter(x=>{if(x.status==0) return x}).map(mapSeminar);
             }else if(state==2){
                 seminarSaya.disabled=true;
                 seminarBelumLihat.disabled=true;
                 seminarHadir.disabled=false;
 
-                updateSeminar(state);
-
+                newEvents= seminars.filter(x=>{if(x.status==1) return x}).map(mapSeminar);
             }else if(state==3){
                 seminarSaya.disabled=true;
                 seminarHadir.disabled=true;
                 seminarBelumLihat.disabled=false;
 
-                updateSeminar(state);
+                newEvents= seminars.filter(x=>{if(x.status==2) return x}).map(mapSeminar);
             }else{
                 seminarSaya.disabled=false;
                 seminarHadir.disabled=false;
                 seminarBelumLihat.disabled=false;
 
-                updateSeminar(state);
+                newEvents = seminars.map(mapSeminar);                
             }
+
+            newEvents.forEach(event=>calendar.addEvent(event));
+            calendar.render();
         }
 
         seminarSaya.addEventListener('click',updateKalender);

@@ -239,3 +239,19 @@
     </script>
 </body>
 </html>
+
+function updateSeminar(state){
+            calendar.getEvents().forEach(event=>event.remove()); 
+            var newEvents={}; 
+            if(state==0){
+                newEvents = seminars.map(mapSeminar);
+            }else if(state==1){
+                newEvents= seminars.filter(x=>{if(x.status==0) return x}).map(mapSeminar);
+            }else if(state==2){
+                newEvents= seminars.filter(x=>{if(x.status==1) return x}).map(mapSeminar);
+            }else{
+                newEvents= seminars.filter(x=>{if(x.status==2) return x}).map(mapSeminar);
+            }
+            newEvents.forEach(event=>calendar.addEvent(event));
+            calendar.render();
+        }
