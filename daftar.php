@@ -1,3 +1,41 @@
+<?php 
+    session_start();
+    if(!isset($_SESSION['nim'])){
+        exit();
+    }else{
+        if(isset($_POST['submit-pengajuan'])){
+            // echo 'yes';
+            require 'connect.php';
+    
+            $judul = $_POST['judul'];
+            $dosenPembimbing1 = $_POST['dosen-pembimbing-1'];
+            $dosenPembimbing2 = $_POST['dosen-pembimbing-2'];
+            $nim = $_SESSION['nim'];
+            
+            // echo $judul.'<br>';
+            // echo $dosenPembimbing1.'<br>';
+            // echo $dosenPembimbing2.'<br>';
+    
+            $sql = "INSERT INTO seminar (judul,nim,dosenPembimbing1,dosenPembimbing2) VALUES ('$judul','$nim','$dosenPembimbing1','$dosenPembimbing2')";
+            // $sql = "SELECT * FROM mahasiswa";
+            // $result = $conn->query($sql);
+
+            if ($conn->query($sql) === TRUE) {
+                echo "New record created successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+
+            $conn->close();
+        }
+    }
+
+    
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,33 +45,40 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div class="navbar">
-        <div class="container-header">
-            <div class="navbar-header dashboard">
-                <div>
-                    <a class="navbar-brand">Sistem Informasi Seminar</a>
-                </div>
-                <div>
-                    <span class="name">Ristirianto Adi(F1D016078)</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php 
+        include 'header.php';
+    ?>
     <div class="container">
         <div class="sidebar float-left col-2">
             <ul class=" nav nav-sidebar">
-                <li>
-                    <a>Jadwal Seminar</a>
-                </li>
-                <li class="active">
-                    <a>Pengajuan Seminar</a>
-                </li>
+
+                <?php 
+                    if(strcmp($_SERVER['REQUEST_URI'],'/seminarcalendar/daftar.php') == 0){
+                ?>
+                    <li>
+                        <a href=" <?php echo 'jadwal.php' ?>">Jadwal Seminar</a>
+                    </li>
+                    <li class="active">
+                        <a href="<?php echo 'daftar.php' ?>" id="pengajuan">Pengajuan Seminar</a>
+                    </li>
+                <?php
+                    } else if(strcmp($_SERVER['REQUEST_URI'],'/seminarcalendar/jadwal.php') == 0){
+                ?>
+                    <li class="active">
+                        <a href=" <?php echo 'jadwal.php' ?>">Jadwal Seminar</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo 'daftar.php' ?>" id="pengajuan">Pengajuan Seminar</a>
+                    </li>
+                <?php
+                    }
+                ?>
             </ul>
         </div>
         <div class="main float-left col-10">
             <h1 class="page-header">Pengajuan Seminar</h1>
             <div class="form-container">
-                <form>
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
                     <div class="data-proposal">
                         <h3>Data Proposal</h3>
                         <div class="input-container">
@@ -50,7 +95,7 @@
                         </div>
                         <div class="input-container">
                             <label class="form-label">Dosen Pembimbing 2:</label>
-                            <select name="dosen-pembimbing-1" class="form">
+                            <select name="dosen-pembimbing-2" class="form">
                                 <option>Dosen 1</option>
                                 <option>Dosen 2</option>
                                 <option>Dosen 3</option>
@@ -76,7 +121,7 @@
                             <input type="file" class="form" name="lembar-pengesahan">
                         </div>
                         <div class="input-container">
-                            <input type="submit" class="form-submit" value="Ajukan Seminar">
+                            <input type="submit" class="form-submit" name="submit-pengajuan" value="Ajukan Seminar">
                             <div style="clear: both;"></div>
                         </div>
                     </div>

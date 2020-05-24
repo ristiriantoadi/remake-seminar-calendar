@@ -6,12 +6,13 @@
     }else{
         require 'connect.php';
         
-        $sql = "SELECT * FROM seminar";
+        $sql = "SELECT * FROM seminar INNER JOIN mahasiswa WHERE seminar.nim LIKE mahasiswa.nim";
         $result = $conn->query($sql);
         $rows=array();
         $nim = $_SESSION['nim'];
         while($row=$result->fetch_assoc()){
-            
+            // echo $row['tanggal'];
+            // exit();
             //0 = seminar saya, 1 = seminar yg sudah sy lihat, 2 = seminar yg belum sy lihat
             if($row['nim'] == $nim){
                 $row['status'] = 0; 
@@ -25,6 +26,13 @@
                     $row['status']=2;
                 }
             }
+
+            //cari nama mahasiswa yang mengadakan seminar
+            // $nim_seminar = $row['nim'];
+            // $query= "SELECT * FROM mahasiswa WHERE nim LIKE '$nim_seminar'";
+            // $res = $conn->query($query);
+            // $row_mahasiswa=$res->fetch_assoc();
+            // $row['nama_mahasiswa'] =$row_mahasiswa['nama'] 
             $rows[] = $row;
         }
         $seminars = json_encode($rows);
@@ -53,6 +61,7 @@
             container.id=x.id_seminar;
             container.title=x.judul;
             container.start=x.tanggal;
+            container.nama=x.nama;
                     
             if(x.status == 0){
                 container.backgroundColor="green";
@@ -66,7 +75,12 @@
             var calendarEl = document.getElementById('calendar');           
             calendar = new FullCalendar.Calendar(calendarEl, {
                 plugins: ['dayGrid'],
-                events: seminars.map(mapSeminar)
+                events: seminars.map(mapSeminar),
+                eventClick: (info)=>{
+                    // console.log("clicked");
+                    document.getElementById("overlay").classList.toggle('active-popup');
+                    document.getElementById("overlay").innerHTML=info.event.extendedProps.nama;
+                }
             });  
             calendar.render();
         });
@@ -74,27 +88,18 @@
       </script>
 </head>
 <body>
-    <div class="navbar">
-        <div class="container-header">
-            <div class="navbar-header dashboard">
-                <div>
-                    <a class="navbar-brand">Sistem Informasi Seminar</a>
-                </div>
-                <div>
-                    <span>Ristirianto Adi(F1D016078)</span>
-                    <span class="navbar-menu">Logout</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="overlay" class="nonactive-popup">Text</div>
+    <?php 
+        include 'header.php';
+    ?>
     <div class="container">
         <div class="sidebar float-left col-2">
             <ul class=" nav nav-sidebar">
                 <li class="active">
-                    <a>Jadwal Seminar</a>
+                    <a href=" <?php echo 'jadwal.php' ?>">Jadwal Seminar</a>
                 </li>
                 <li>
-                    <a>Pengajuan Seminar</a>
+                    <a href="<?php echo 'daftar.php' ?>" id="pengajuan">Pengajuan Seminar</a>
                 </li>
             </ul>
         </div>

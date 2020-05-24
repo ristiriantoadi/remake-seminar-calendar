@@ -250,9 +250,11 @@ ul{
     /* color:#428bca;; */
     padding:8px 15px;
     display: block;
+    text-decoration: none;
+    color:black;
 }
 
-.nav li:hover{
+.nav li:hover a{
     background-color: #428bca;
     color:white;
     cursor: pointer;
@@ -261,6 +263,11 @@ ul{
 .nav li.active{
     background-color: #428bca;
     color:white;
+}
+
+.nav li.active a{
+    color:white;
+    text-decoration:none;
 }
 
 .col-2{
@@ -333,3 +340,28 @@ footer{
     padding:20px;
     height:50px;
 }
+
+#overlay{
+    position: absolute;
+    top:0;
+    background-color: rgba(0,0,0,0);
+    height:100%;
+    width: 100%;;
+}
+
+.nonactive-popup{
+    display: none;
+}
+
+.active-popup{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* opacity: 0.2; */
+    color:green;
+}
+
+/* .sidebar a{
+    color:black;
+    text-decoration: none;
+} */

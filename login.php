@@ -14,7 +14,12 @@
         // $sql = "SELECT * FROM mahasiswa";
         $result = $conn->query($sql);
         if($result->num_rows>0){
+
+            $row=$result->fetch_assoc();
+
+            $_SESSION['nama']=$row['nama']; 
             $_SESSION['nim']=$nim;
+            
             header("Location: jadwal.php");
             exit();
         }else{
