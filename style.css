@@ -361,6 +361,19 @@ footer{
     color:green;
 }
 
+.alert{
+    padding:10px;
+    color:white;
+    margin-bottom:20px;
+}
+
+.wait {
+    background-color: #4682b4;
+}
+
+.terima{
+    background-color: #4cbb17;
+}
 /* .sidebar a{
     color:black;
     text-decoration: none;
