@@ -2,6 +2,7 @@
     padding: 0px;
     box-sizing: border-box;
     margin:0;
+    /* z-index:-1; */
 }
 
 body,html{
@@ -13,6 +14,10 @@ body{
     font-weight: 400;
     line-height: 1.5;
     color: #212529;
+}
+
+.container{
+    z-index: -1;
 }
 
 
@@ -59,6 +64,8 @@ body{
 
 .navbar-menu{
     margin-left:15px;
+    text-decoration: none;
+    color: black;
 }
 .navbar-menu:hover{
     /* font-size: 14px; */
@@ -99,23 +106,23 @@ body{
 
 .login-title{
     box-sizing: border-box;
-color: #428bca;
-display: block;
-font-family: Ubuntu-Bold;
-font-size: 30px;
-font-weight: 400;
-line-height: 36px;
-margin-bottom: 0px;
-margin-left: 0px;
-margin-right: 0px;
-margin-top: 0px;
-padding-bottom: 51px;
-padding-left: 0px;
-padding-right: 0px;
-padding-top: 0px;
-text-align: center;
-text-transform: uppercase;
-width: 390px;
+    color: #428bca;
+    display: block;
+    font-family: Ubuntu-Bold;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 36px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    padding-bottom: 51px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 390px;
 }
 
 .wrap-input{
@@ -342,11 +349,16 @@ footer{
 }
 
 #overlay{
-    position: absolute;
+    position: fixed;
     top:0;
-    background-color: rgba(0,0,0,0);
+    left:0;
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.2); /* Black w/ opacity */
+    opacity: 1;
     height:100%;
-    width: 100%;;
+    width: 100%;
+    z-index: 100;
+    
 }
 
 .nonactive-popup{
@@ -357,8 +369,81 @@ footer{
     display: flex;
     align-items: center;
     justify-content: center;
-    /* opacity: 0.2; */
-    color:green;
+    /* opacity: 1; */
+    /* color:green; */
+}
+
+.message{
+    color: black;
+    width: 80%;
+    /* -webkit-box-shadow: 3px 3px 5px 6px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    /* -moz-box-shadow:    3px 3px 5px 6px #ccc;  Firefox 3.5 - 3.6 */
+    /* box-shadow:         3px 3px 5px 6px #ccc;  */
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.4);
+    border-radius: 5px;
+    z-index: 10;
+    /* opacity: 1; */
+}
+
+.message .header {
+    background-color: #428bca;
+    color:white;
+    padding: 10px 32px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.message .content{
+    background-color:white;
+    padding: 10px 20px;
+}
+
+/* .message .header h2{
+    float: left;
+} */
+
+.fa-times{
+    /* position: absolute; */
+    /* right: 20px; */
+    /* top:20px; */
+    /* float: right; */
+    font-size:20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.fa-times:hover{
+    color: black;
+}
+
+.content .info-row{
+    /* background-color: rgba(100,100,0,1); */
+    /* opacity: 1; */
+    /* z-index: 1; */
+    /* visibility: visible; */
+    margin: 10px 0;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.content .info-row label{
+    width: 200px;
+    display:inline-block;
+    font-weight: bold;
+    /* background-color: rgba(255,255,255,1); */
+    /* opacity: 1; */
+}
+
+.content .info-row span{
+    /* margin-left:5px; */
+    /* background-color: rgba(255,255,255,1); */
+    /* opacity: 1; */
+}
+
+.content ol{
+    list-style-position: inside;
 }
 
 .alert{

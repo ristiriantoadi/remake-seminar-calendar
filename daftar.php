@@ -54,11 +54,13 @@
 
                             if ($result === TRUE) {
                                 echo "New record created successfully";
+                                $conn->close();
+                                header("Location: daftar.php");
                             } else {
                                 echo "Error: " . $sql . "<br>" . $conn->error;
+                                $conn->close();
+                                exit();
                             }
-
-                            $conn->close();
                             
                         }else{
                             echo "There was error uploading file";}

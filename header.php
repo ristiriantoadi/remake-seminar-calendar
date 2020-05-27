@@ -6,7 +6,7 @@
             </div>
             <div>
                 <span><?php echo $_SESSION['nama'] ?> (<?php echo $_SESSION['nim'] ?>)</span>
-                <span class="navbar-menu">Logout</span>
+                <a class="navbar-menu" href="<?php echo 'logoutMahasiswa.php' ?>">Logout</a>
             </div>
         </div>
     </div>

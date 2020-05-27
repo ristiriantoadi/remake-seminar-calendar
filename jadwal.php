@@ -6,10 +6,21 @@
     }else{
         require 'connect.php';
         
+         //cek apakah proposal sudah diajukan
+         $nim = $_SESSION['nim'];
+         $sql = "SELECT * FROM seminar WHERE nim LIKE '$nim'";
+         $result = $conn->query($sql);
+         if($result->num_rows>0){
+             $row=$result->fetch_assoc();
+             $statusProposal = $row['status'];
+         }else{
+            $statusProposal="kosong"; 
+         }
+
         $sql = "SELECT * FROM seminar INNER JOIN mahasiswa WHERE seminar.nim LIKE mahasiswa.nim";
         $result = $conn->query($sql);
         $rows=array();
-        $nim = $_SESSION['nim'];
+        // $nim = $_SESSION['nim'];
         while($row=$result->fetch_assoc()){
             // echo $row['tanggal'];
             // exit();
@@ -27,12 +38,6 @@
                 }
             }
 
-            //cari nama mahasiswa yang mengadakan seminar
-            // $nim_seminar = $row['nim'];
-            // $query= "SELECT * FROM mahasiswa WHERE nim LIKE '$nim_seminar'";
-            // $res = $conn->query($query);
-            // $row_mahasiswa=$res->fetch_assoc();
-            // $row['nama_mahasiswa'] =$row_mahasiswa['nama'] 
             $rows[] = $row;
         }
         $seminars = json_encode($rows);
@@ -45,12 +50,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="fullcalendar/packages/core/main.css">
     <link rel="stylesheet" type="text/css" href="fullcalendar/packages/daygrid/main.css">
     <link rel="stylesheet" type="text/css" href="style.css">
 
     <script src='fullcalendar/packages/core/main.js'></script>
     <script src='fullcalendar/packages/daygrid/main.js'></script>
+    
+    <script>
+        function openModal(info){
+            document.getElementById("head").innerHTML=`[Seminar TA 1] ${info.event.extendedProps.nama} 
+            (${info.event.extendedProps.nim})`;
+            document.getElementById("judul").innerHTML=`${info.event.title}`;
+            document.getElementById("ruangan").innerHTML=`${info.event.extendedProps.ruangan}`;
+            document.getElementById("tanggal").innerHTML=`${info.event.extendedProps.tanggal}`;
+            document.getElementById("overlay").classList.toggle('active-popup');
+        }
+
+        function closeModal(){
+            console.log("halo");
+            document.getElementById("overlay").classList.toggle('active-popup');
+        }
+    </script>
 
     <script>
         var seminars = <?php echo $seminars ?>;
@@ -62,6 +84,9 @@
             container.title=x.judul;
             container.start=x.tanggal;
             container.nama=x.nama;
+            container.nim=x.nim;
+            container.ruangan=x.ruangan;
+            container.tanggal=x.tanggal;
                     
             if(x.status == 0){
                 container.backgroundColor="green";
@@ -78,8 +103,9 @@
                 events: seminars.map(mapSeminar),
                 eventClick: (info)=>{
                     // console.log("clicked");
-                    document.getElementById("overlay").classList.toggle('active-popup');
-                    document.getElementById("overlay").innerHTML=info.event.extendedProps.nama;
+                    openModal(info);
+                    // document.getElementById("overlay").classList.toggle('active-popup');
+                    // document.getElementById("overlay").innerHTML=info.event.extendedProps.nama;
                 }
             });  
             calendar.render();
@@ -88,7 +114,57 @@
       </script>
 </head>
 <body>
-    <div id="overlay" class="nonactive-popup">Text</div>
+    <div id="overlay" class="nonactive-popup">
+        <div class="message">
+            <div class="header">
+                <h2 id="head">[Seminar TA 1] Ristirianto Adi (F1D016078)</h2>
+                <i class="fa fa-times" onclick="closeModal()"></i>
+                <!-- <div style="clear:both"></div> -->
+            </div>
+            <div class="content">
+                <div class="info-row">
+                    <label>Judul</label><span id="judul">Deteksi Api pada Video dengan Gaussian Mixture Model 
+                        untuk Deteksi Gerakan dan Segmentasi Warna Api dalam Ruang Warna YCbCr</span>
+                </div>
+                <div class="info-row">
+                    <label>Ruangan</label><span id="ruangan">A3-01</span>
+                </div>
+                <div class="info-row">
+                    <label>Tanggal</label><span id="tanggal">27-05-2020</span>
+                </div>
+                <div class="info-row">
+                    <div style="display:inline-block;width:50%">
+                       <label>Pembimbing</label>
+                       <ol>
+                           <li>Dosen 1</li>
+                           <li>Dosen 2</li>
+                           <li>Dosen 3</li>
+                       </ol>
+                    </div>
+                    <div style="display:inline-block;width:50%">
+                       <label>Penguji</label>
+                       <ol>
+                           <li>Dosen 4</li>
+                           <li>Dosen 5</li>
+                       </ol>
+                    </div>
+                </div>
+                <!-- <div class="info-row">
+                    <label>Dosen Pembimbing 2</label><span>Dosen 2</span>
+                </div>
+                <div class="info-row">
+                    <label>Dosen Penguji 1</label><span>Dosen 3</span>
+                </div>
+                <div class="info-row">
+                    <label>Dosen Penguji 2</label><span>Dosen 4</span>
+                </div>
+                <div class="info-row">
+                    <label>Dosen Penguji 3</label><span>Dosen 4</span>
+                </div> -->
+            </div>
+            <!-- <div class="content">Content</div> -->
+        </div>
+    </div>
     <?php 
         include 'header.php';
     ?>
@@ -105,6 +181,18 @@
         </div>
         <div class="main float-left col-10">
             <h1 class="page-header">Jadwal Seminar</h1>
+            <?php 
+                if(strcmp($statusProposal,'tunggu') == 0){
+            ?>
+                    <div class="wait alert">Proposal Anda sedang dikonfirmasi oleh Admin. Harap menunggu.</div>
+            <?php
+                }else if(strcmp($statusProposal,'terima') == 0){
+            ?>
+                    <div class="terima alert">Seminar Anda telah dijadwalkan. Silakan cek di Jadwal Seminar.</div>
+            <?php
+                }
+            ?>
+            
             <div class="filter-container">
                 <span class="filter">Filter: </span>
                 <span class="filter-item">

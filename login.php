@@ -57,7 +57,7 @@
                         <input class="input" type="text" name="nim" placeholder="NIM">
                     </div>
                     <div class="wrap-input">
-                        <input class="input" type="text" name="password" placeholder="Password">
+                        <input class="input" type="password" name="password" placeholder="Password">
                     </div>
                     <div class="flex-sb-m">
                         <!-- <div class="contact">
