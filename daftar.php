@@ -149,11 +149,11 @@
                                 <h3>Data Proposal</h3>
                                 <div class="input-container">
                                     <label class="form-label" for="judul">Judul:</label>
-                                    <input class="form" type="text" name="judul" placeholder="Judul Proposal">
+                                    <input required class="form" type="text" name="judul" placeholder="Judul Proposal">
                                 </div>
                                 <div class="input-container">
                                     <label class="form-label" for="dosen-pembimbing-1">Dosen Pembimbing 1:</label>
-                                    <select name="dosen-pembimbing-1" class="form">
+                                    <select required name="dosen-pembimbing-1" class="form">
                                         <option>Dosen 1</option>
                                         <option>Dosen 2</option>
                                         <option>Dosen 3</option>
@@ -161,7 +161,7 @@
                                 </div>
                                 <div class="input-container">
                                     <label class="form-label" for="dosen-pembimbing-2">Dosen Pembimbing 2:</label>
-                                    <select name="dosen-pembimbing-2" class="form">
+                                    <select required name="dosen-pembimbing-2" class="form">
                                         <option>Dosen 1</option>
                                         <option>Dosen 2</option>
                                         <option>Dosen 3</option>
@@ -172,19 +172,19 @@
                                 <h3>Berkas Syarat Seminar</h3>
                                 <div class="input-container">
                                     <label class="form-label" for="surat-puas-pkl">Surat Puas PKL</label>
-                                    <input type="file" class="form" name="surat-puas-pkl">
+                                    <input required type="file" class="form" name="surat-puas-pkl">
                                 </div>
                                 <div class="input-container">
                                     <label class="form-label" for="proposal">Proposal</label>
-                                    <input type="file" class="form" name="proposal">
+                                    <input required type="file" class="form" name="proposal">
                                 </div>
                                 <div class="input-container">
                                     <label class="form-label" for="surat-pengajuan">Surat Pengajuan Seminar TA</label>
-                                    <input type="file" class="form" name="surat-pengajuan">
+                                    <input required type="file" class="form" name="surat-pengajuan">
                                 </div>
                                 <div class="input-container">
                                     <label class="form-label" for="lembar-pengesahan">Lembar Pengesahan</label>
-                                    <input type="file" class="form" name="lembar-pengesahan">
+                                    <input required type="file" class="form" name="lembar-pengesahan">
                                 </div>
                                 <div class="input-container">
                                     <input type="submit" class="form-submit" name="submit-pengajuan" value="Ajukan Seminar">

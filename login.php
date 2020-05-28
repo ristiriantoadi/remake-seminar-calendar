@@ -23,10 +23,16 @@
             header("Location: jadwal.php");
             exit();
         }else{
-            echo "no result";
+            header("Location:login.php?error=true");
         }
         
 
+    }
+    $error=false;
+    if(isset($_GET['error'])){
+        if($_GET['error'] == "true"){
+            $error=true;
+        }
     }
 ?>
 
@@ -53,11 +59,16 @@
             <div class="wrap-login">
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" class="login-form">
                     <span class="login-title">Login</span>
+                    <?php 
+                        if($error){
+                            echo "<div class='tolak alert'>NIM atau password salah</div>";
+                        }
+                    ?>
                     <div class="wrap-input">
-                        <input class="input" type="text" name="nim" placeholder="NIM">
+                        <input required class="input" type="text" name="nim" placeholder="NIM">
                     </div>
                     <div class="wrap-input">
-                        <input class="input" type="password" name="password" placeholder="Password">
+                        <input required class="input" type="password" name="password" placeholder="Password">
                     </div>
                     <div class="flex-sb-m">
                         <!-- <div class="contact">

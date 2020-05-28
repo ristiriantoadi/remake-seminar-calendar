@@ -429,8 +429,9 @@ footer{
 }
 
 .content .info-row label{
-    width: 200px;
-    display:inline-block;
+    /* width: 200px; */
+    margin-right:60px;
+    /* display:inline-block; */
     font-weight: bold;
     /* background-color: rgba(255,255,255,1); */
     /* opacity: 1; */
@@ -440,6 +441,7 @@ footer{
     /* margin-left:5px; */
     /* background-color: rgba(255,255,255,1); */
     /* opacity: 1; */
+    /* width: */
 }
 
 .content ol{
@@ -450,6 +452,7 @@ footer{
     padding:10px;
     color:white;
     margin-bottom:20px;
+    border-radius: 3px;
 }
 
 .wait {
@@ -458,6 +461,10 @@ footer{
 
 .terima{
     background-color: #4cbb17;
+}
+
+.tolak{
+    background-color: tomato;
 }
 /* .sidebar a{
     color:black;

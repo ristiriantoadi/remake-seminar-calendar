@@ -62,9 +62,14 @@
         function openModal(info){
             document.getElementById("head").innerHTML=`[Seminar TA 1] ${info.event.extendedProps.nama} 
             (${info.event.extendedProps.nim})`;
-            document.getElementById("judul").innerHTML=`${info.event.title}`;
+            document.getElementById("judul").innerHTML=`${info.event.extendedProps.judul}`;
             document.getElementById("ruangan").innerHTML=`${info.event.extendedProps.ruangan}`;
             document.getElementById("tanggal").innerHTML=`${info.event.extendedProps.tanggal}`;
+            document.getElementById("dosen-pembimbing-1").innerHTML=`${info.event.extendedProps.dosenPembimbing1}`;
+            document.getElementById("dosen-pembimbing-2").innerHTML=`${info.event.extendedProps.dosenPembimbing2}`;
+            document.getElementById("dosen-penguji-1").innerHTML=`${info.event.extendedProps.dosenPenguji1}`;
+            document.getElementById("dosen-penguji-2").innerHTML=`${info.event.extendedProps.dosenPenguji2}`;
+            document.getElementById("dosen-penguji-3").innerHTML=`${info.event.extendedProps.dosenPenguji3}`;
             document.getElementById("overlay").classList.toggle('active-popup');
         }
 
@@ -81,12 +86,19 @@
         var mapSeminar=x=>{
             const container={};
             container.id=x.id_seminar;
-            container.title=x.judul;
+            container.title=`[Seminar TA 1] ${x.nama} 
+            (${x.nim})`;
             container.start=x.tanggal;
             container.nama=x.nama;
             container.nim=x.nim;
+            container.judul=x.judul;
             container.ruangan=x.ruangan;
             container.tanggal=x.tanggal;
+            container.dosenPembimbing1=x.dosenPembimbing1;
+            container.dosenPembimbing2=x.dosenPembimbing2;
+            container.dosenPenguji1=x.dosenPenguji1;
+            container.dosenPenguji2=x.dosenPenguji2;
+            container.dosenPenguji3=x.dosenPenguji3;
                     
             if(x.status == 0){
                 container.backgroundColor="green";
@@ -133,21 +145,25 @@
                     <label>Tanggal</label><span id="tanggal">27-05-2020</span>
                 </div>
                 <div class="info-row">
-                    <div style="display:inline-block;width:50%">
+                    <div style="width:50%;display:inline-block">
                        <label>Pembimbing</label>
                        <ol>
-                           <li>Dosen 1</li>
-                           <li>Dosen 2</li>
-                           <li>Dosen 3</li>
+                           <li id="dosen-pembimbing-1">Dosen 1</li>
+                           <li id="dosen-pembimbing-2">Dosen 2</li>
                        </ol>
                     </div>
-                    <div style="display:inline-block;width:50%">
+                    <div style="width:50%;display:inline-block">
                        <label>Penguji</label>
                        <ol>
-                           <li>Dosen 4</li>
-                           <li>Dosen 5</li>
+                           <li id="dosen-penguji-1">Dosen 3</li>
+                           <li id="dosen-penguji-2">Dosen 4</li>
+                           <li id="dosen-penguji-3">Dosen 5</li>
                        </ol>
                     </div>
+                </div>
+                <div>
+                    <input type="submit" class="form-submit" name="submit-pengajuan" value="Saya bersedia hadir">
+                    <div style="clear: both;"></div>
                 </div>
                 <!-- <div class="info-row">
                     <label>Dosen Pembimbing 2</label><span>Dosen 2</span>
