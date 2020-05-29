@@ -6,26 +6,16 @@
     }else{
         require 'connect.php';
         
-         //cek apakah proposal sudah diajukan
-         $nim = $_SESSION['nim'];
-         $sql = "SELECT * FROM seminar WHERE nim LIKE '$nim'";
-         $result = $conn->query($sql);
-         if($result->num_rows>0){
-             $row=$result->fetch_assoc();
-             $statusProposal = $row['status'];
-         }else{
-            $statusProposal="kosong"; 
-         }
-
         $sql = "SELECT * FROM seminar INNER JOIN mahasiswa WHERE seminar.nim LIKE mahasiswa.nim";
         $result = $conn->query($sql);
         $rows=array();
-        // $nim = $_SESSION['nim'];
+        $nim = $_SESSION['nim'];
         while($row=$result->fetch_assoc()){
             // echo $row['tanggal'];
             // exit();
             //0 = seminar saya, 1 = seminar yg sudah sy lihat, 2 = seminar yg belum sy lihat
             if($row['nim'] == $nim){
+                $statusProposal = $row['statusProposal'];
                 $row['status'] = 0; 
             }else{
                 $id_seminar=$row['id_seminar'];
@@ -60,6 +50,7 @@
     
     <script>
         function openModal(info){
+            
             document.getElementById("head").innerHTML=`[Seminar TA 1] ${info.event.extendedProps.nama} 
             (${info.event.extendedProps.nim})`;
             document.getElementById("judul").innerHTML=`${info.event.extendedProps.judul}`;
@@ -70,12 +61,62 @@
             document.getElementById("dosen-penguji-1").innerHTML=`${info.event.extendedProps.dosenPenguji1}`;
             document.getElementById("dosen-penguji-2").innerHTML=`${info.event.extendedProps.dosenPenguji2}`;
             document.getElementById("dosen-penguji-3").innerHTML=`${info.event.extendedProps.dosenPenguji3}`;
+
+            var displayButton = "none";
+            var displayText="none";
+            console.log(info.event.extendedProps.status);
+            if(info.event.extendedProps.status === 2){
+                displayButton="inline-block";
+            }else if(info.event.extendedProps.status === 1){
+                displayText="inline-block";
+            }
+
+            // console.log(display);
+
+            document.getElementById("button-hadir").style.display=displayButton;
+            document.getElementById("text-hadir").style.display=displayText;
+            document.getElementById("button-hadir").addEventListener("click", ()=>{
+                handlePeserta(info);
+            }); 
+
             document.getElementById("overlay").classList.toggle('active-popup');
         }
 
         function closeModal(){
             console.log("halo");
             document.getElementById("overlay").classList.toggle('active-popup');
+        }
+
+        function handlePeserta(info){
+            var nim = "<?php echo $_SESSION['nim'] ?>";
+            // console.log(nim);
+            var url=`http://localhost/seminarcalendar/handlePeserta.php?id-seminar=${info.event.extendedProps.idSeminar}&nim=${nim}`;
+            // var url =`${info.event.extendedProps.judul}`;
+            console.log(url);
+            fetch(url)
+            .then((response)=>{
+                if(response.status !== 200){
+                    console.log('Looks like there was a problem. Status Code: ' +
+                        response.status);
+                    return;
+                }
+                // console.log("Info before: "+info.event.extendedProps.status);
+                // info.event.extendedProps.status="something";
+                // console.log("Info: "+info.event.extendedProps.status);
+                // closeModal();
+                // openModal(info);
+
+                response.json().then((data)=>{
+                    console.log(data);
+
+                    //update kalendar
+                    calendar.getEvents().forEach(event=>event.remove());  
+                    var newEvents = data.map(mapSeminar);
+                    newEvents.forEach(event=>calendar.addEvent(event));
+                    calendar.render();
+                    closeModal();
+                })
+            })
         }
     </script>
 
@@ -90,6 +131,7 @@
             (${x.nim})`;
             container.start=x.tanggal;
             container.nama=x.nama;
+            container.idSeminar=x.id_seminar;
             container.nim=x.nim;
             container.judul=x.judul;
             container.ruangan=x.ruangan;
@@ -99,6 +141,7 @@
             container.dosenPenguji1=x.dosenPenguji1;
             container.dosenPenguji2=x.dosenPenguji2;
             container.dosenPenguji3=x.dosenPenguji3;
+            container.status=x.status;
                     
             if(x.status == 0){
                 container.backgroundColor="green";
@@ -162,7 +205,8 @@
                     </div>
                 </div>
                 <div>
-                    <input type="submit" class="form-submit" name="submit-pengajuan" value="Saya bersedia hadir">
+                    <input type="submit" id="button-hadir" class="form-submit" name="submit-pengajuan" value="Saya bersedia hadir">
+                    <h4 id="text-hadir" style="color:green">Anda telah terdaftar sebagai peserta</h4>
                     <div style="clear: both;"></div>
                 </div>
                 <!-- <div class="info-row">

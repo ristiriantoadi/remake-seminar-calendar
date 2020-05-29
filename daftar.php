@@ -11,7 +11,7 @@
         $result = $conn->query($sql);
         if($result->num_rows>0){
             $row=$result->fetch_assoc();
-            $statusProposal = $row['status'];
+            $statusProposal = $row['statusProposal'];
         }else{
            $statusProposal="kosong"; 
         }
@@ -49,7 +49,7 @@
                             $fileDestination = "proposal-seminar/$nim-lembar-pengesahan.pdf";
                             move_uploaded_file($lembarPengesahan['tmp_name'],$fileDestination);
                             
-                            $sql = "INSERT INTO seminar (judul,nim,dosenPembimbing1,dosenPembimbing2,status) VALUES ('$judul','$nim','$dosenPembimbing1','$dosenPembimbing2','tunggu')";
+                            $sql = "INSERT INTO seminar (judul,nim,dosenPembimbing1,dosenPembimbing2,statusProposal) VALUES ('$judul','$nim','$dosenPembimbing1','$dosenPembimbing2','tunggu')";
                             $result = $conn->query($sql);
 
                             if ($result === TRUE) {
