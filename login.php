@@ -23,6 +23,16 @@
             header("Location: jadwal.php");
             exit();
         }else{
+            $sql = "SELECT * FROM admin WHERE password like '$password'";
+            $result = $conn->query($sql);
+            if($result->num_rows>0){
+                $row=$result->fetch_assoc();
+                $_SESSION['admin']='admin'; 
+                // $_SESSION['nim']=$nim;
+                
+                header("Location: jadwalAdmin.php");
+                exit();
+            }
             header("Location:login.php?error=true");
         }
         

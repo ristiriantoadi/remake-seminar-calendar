@@ -229,16 +229,7 @@
         include 'header.php';
     ?>
     <div class="container">
-        <div class="sidebar float-left col-2">
-            <ul class=" nav nav-sidebar">
-                <li class="active">
-                    <a href=" <?php echo 'jadwal.php' ?>">Jadwal Seminar</a>
-                </li>
-                <li>
-                    <a href="<?php echo 'daftar.php' ?>" id="pengajuan">Pengajuan Seminar</a>
-                </li>
-            </ul>
-        </div>
+        <?php include 'sidebar.php'; ?>
         <div class="main float-left col-10">
             <h1 class="page-header">Jadwal Seminar</h1>
             <?php 

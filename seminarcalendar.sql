@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 28, 2020 at 06:53 AM
+-- Generation Time: May 30, 2020 at 04:33 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.4
 
@@ -20,6 +20,23 @@ SET time_zone = "+00:00";
 --
 -- Database: `seminarcalendar`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `password` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`password`) VALUES
+('123');
 
 -- --------------------------------------------------------
 
@@ -75,7 +92,7 @@ CREATE TABLE `seminar` (
   `dosenPenguji1` varchar(20) NOT NULL,
   `dosenPenguji2` varchar(20) NOT NULL,
   `dosenPenguji3` varchar(20) NOT NULL,
-  `status` varchar(10) NOT NULL,
+  `statusProposal` varchar(10) NOT NULL,
   `ruangan` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -83,8 +100,9 @@ CREATE TABLE `seminar` (
 -- Dumping data for table `seminar`
 --
 
-INSERT INTO `seminar` (`id_seminar`, `judul`, `tanggal`, `nim`, `dosenPembimbing1`, `dosenPembimbing2`, `dosenPenguji1`, `dosenPenguji2`, `dosenPenguji3`, `status`, `ruangan`) VALUES
-(3, 'Pengenalan Pola Tulisan Tangan Aksara Arab Menggunakan Ekstraksi Fitur Local Binary Pattern Dan Zoning Dan Klasifikasi Backpropagation Artificial Neural Network', '2020-05-26', 'F1D016077', 'Dosen 1', 'Dosen 2', 'Dosen 3', 'ABC', 'Dosen 5', 'terima', 'a3-01');
+INSERT INTO `seminar` (`id_seminar`, `judul`, `tanggal`, `nim`, `dosenPembimbing1`, `dosenPembimbing2`, `dosenPenguji1`, `dosenPenguji2`, `dosenPenguji3`, `statusProposal`, `ruangan`) VALUES
+(3, 'Pengenalan Pola Tulisan Tangan Aksara Arab Menggunakan Ekstraksi Fitur Local Binary Pattern Dan Zoning Dan Klasifikasi Backpropagation Artificial Neural Network', '2020-05-26', 'F1D016077', 'Dosen 1', 'Dosen 2', 'Dosen 3', 'ABC', 'Dosen 5', 'terima', 'a3-01'),
+(13, 'a', '2020-05-30', 'F1D016078', 'Dosen 1', 'Dosen 1', '', '', '', 'terima', '');
 
 --
 -- Indexes for dumped tables
@@ -104,7 +122,7 @@ ALTER TABLE `seminar`
 -- AUTO_INCREMENT for table `seminar`
 --
 ALTER TABLE `seminar`
-  MODIFY `id_seminar` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_seminar` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
